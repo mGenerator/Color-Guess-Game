@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Color Guessing Game</h1>
-  <button type="button" onclick="runGame()">Start Game</button>
+  <button type="button" onclick="startGame()">Start Game</button>
 
     <!--
 This code is for a creating color guessing game
@@ -19,10 +19,12 @@ The game ends and the background color of the page changes to the successful col
   <script>
     //Setup Initial Game State
     const COLORS_ARRAY = ['blue','cyan','gold','gray','green','magenta','orange','red','white','yellow']; //set of colors
+    let guesses = 0; //variable that tracks guesses
+
     function runGame(){
-      const TARGET_INDEX = Math.floor(Math.random()*COLORS_ARRAY.length); //random index for choosing initial game color at game start
+      const TARGET_INDEX = Math.floor(Math.random() * COLORS_ARRAY.length); //random index for choosing initial game color at game start
       const TARGET = COLORS_ARRAY[TARGET_INDEX]; //the color the player has to guess
-      console.log("Target color is " +TARGET); //logs this games 'target' color
+      console.log("The color is " +TARGET); //logs this games 'target' color
       let guess = ''; // empty container for storing player guess
       let correct = false; //used for controlling do-while loop
     //End Setup
@@ -32,20 +34,32 @@ The game ends and the background color of the page changes to the successful col
       COLORS_ARRAY.join(', ') + "\nWhat color am I thinking of?"); //Ask for player guess, store in *guess*
         if (guess === null) {
           console.log("User hit cancel. See you next game");
-          alert("You've hit cancel, The game will now end."); 
+          alert("You've hit cancel. The game has been aborted."); 
           return;
         }
         else if(guess === ""){
-          console.log("User entered empty string").
+          console.log("User entered empty string");
           alert("You didnt provide a guess. Try again.");
           continue;
         } 
         correct = checkGuess(guess, TARGET);
     }while(!correct);
       console.log("No longer in do while");
-      alert('Congratulations. You guessed correctly');
+      console.log("Player made " + guesses + " before finding the answer")
+      alert('Congratulations. The color was ' + guess + 
+      ".\nIt took " + guesses + " attempt(s). You are \'Da champ!");
+      guesses = 0; //reset guess counter for next game
+      //prompt user to whether they wish to change background color to target color
+      let bgChange = prompt(`Would you like to see the winning color?
+      Type 'yes' to see it, 
+      or 'no' to keep the background the same`).toLowerCase(); 
+      if (bgChange === 'yes'){
+        document.body.style.backgroundColor = TARGET;
+      }
+    
+
     }
-    //This function 
+    //This function performs validation to check the player guess against the target 
     function checkGuess(guess, target){ //these parameters relate to userGuess and gameColor
       let correct = false;
       COLORS_ARRAY.sort(); //sort the array alpabetically
@@ -53,6 +67,8 @@ The game ends and the background color of the page changes to the successful col
       if(!(COLORS_ARRAY.includes(guess))){ //is the 'guess' color not on the list?, if so do this
         console.log("Player guess color is not on the list");
         alert("Your Color is Not Recognized. Try again.");
+        guesses++;
+        console.log("Guess Count is " + guesses);
         return; //return to the do while loop
       }
       //guess is now confirmed to be part of the color list
@@ -60,18 +76,35 @@ The game ends and the background color of the page changes to the successful col
       else if(COLORS_ARRAY.indexOf(guess) > COLORS_ARRAY.indexOf(target)){
         console.log('The guess is incorrect, and higher than target');
         alert("Your guess is incorrect\nHint: Your answer was higher alphabetically.");
+        guesses++;
+        console.log("Guess Count is " + guesses);
         return;
       }
       else if(COLORS_ARRAY.indexOf(guess) < COLORS_ARRAY.indexOf(target)){
         console.log('The guess is incorrect, and lower than target');
-        alert("Your guess is incorrect\nHint: Your answer was lower alphabetically.");
+        alert("Your guess is incorrect.\nHint: Your answer was lower alphabetically.");
+        guesses++;
+        console.log("Guess Count is " + guesses);
         return;
       }
       else{
         console.log('Player answer is correct. HUZZAH!');
+        guesses++;
+        console.log("Guess Count is " + guesses);
         correct = true;
       }//no return statement here, I want the code to continue
         return correct;
+      }
+      //start game with white background then run game
+      function startGame(){
+        resetBackground();
+        runGame();
+      }
+      //reset background color
+      function resetBackground(){
+        document.body.style.backgroundColor = 'white';
+        
+
       }
     
 
