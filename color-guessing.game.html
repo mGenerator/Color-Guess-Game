@@ -8,8 +8,75 @@
 <body>
   <h1>Color Guessing Game</h1>
   <button type="button" onclick="runGame()">Start Game</button>
+
+    <!--
+This code is for a creating color guessing game
+The game chooses a color from list of colors
+The player then enters a guess for what that current color is
+If the player is successful, they win!
+The game ends and the background color of the page changes to the successful color
+-->
   <script>
+    const COLORS_ARRAY = ['blue','cyan','gold','gray','green','magenta','orange','red','white','yellow']; //set of colors
+    function runGame(){
+      //Setup Inital Game State
+      const COLORS_ARRAY = ['blue','cyan','gold','gray','green','magenta','orange','red','white','yellow']; //set of colors
+      const TARGET_INDEX = Math.floor(Math.random()*COLORS_ARRAY.length); //random index for choosing initial game color at game start
+      
+      const TARGET = COLORS_ARRAY[TARGET_INDEX]; //the color the player has to guess
+      console.log(TARGET); //logs this games 'target' color
+      let guess = ''; // empty container for guess
+      let correct = false; //used for controlling do-while loop
+
+
+      do{
+      guess = prompt("I'm thinking of one of these colors:\n" +
+      COLORS_ARRAY.join(', ') + "\nWhat color am I thinking of?"); //Ask for player guess, store in *guess*
+        if (guess === null) {console.log("You've hit cancel. See you next game"); return;} 
+        correct = checkGuess(guess, TARGET);
+    }while(!correct);
+      console.log("No longer in do while");
+      alert('Congratulations. You guessed correctly');
+    }
+    //This function 
+    function checkGuess(guess, target){ //these parameters relate to userGuess and gameColor
+      let correct = false;
+      let colorArrCheck = COLORS_ARRAY.slice();
+      colorArrCheck.sort() //sort the array alpabetically
+      //These statement perform validation
+      if(!(colorArrCheck.includes(guess))){ //is the 'guess' color not on the list?, if so do this
+        console.log("Player guess color is not on the list");
+        alert("Your Color is Not Recognized. Try again.");
+        return; //return to the do while loop
+      }
+      //guess is now confirmed to be part of the color list
+
+      else if(colorArrCheck.indexOf(guess) > colorArrCheck.indexOf(target)){
+        console.log('The guess is incorrect, and higher than target');
+        alert("Your guess is incorrect\nHint: Your answer was higher alphabetically.");
+        return;
+      }
+      else if(colorArrCheck.indexOf(guess) < colorArrCheck.indexOf(target)){
+        console.log('The guess is incorrect, and lower than target');
+        alert("Your guess is incorrect\nHint: Your answer was lower alphabetically.");
+        return;
+      }
+      else{
+        console.log('Player answer is correct. HUZZAH!');
+        correct = true;
+      }//no return statement here, I want the code to continue
+        return correct;
+      }
     
+
+
   </script>
+
+
+
+
+
+
+  
 </body>
 </html>
