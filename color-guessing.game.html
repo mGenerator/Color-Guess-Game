@@ -17,22 +17,29 @@ If the player is successful, they win!
 The game ends and the background color of the page changes to the successful color
 -->
   <script>
+    //Setup Initial Game State
     const COLORS_ARRAY = ['blue','cyan','gold','gray','green','magenta','orange','red','white','yellow']; //set of colors
     function runGame(){
-      //Setup Inital Game State
-      const COLORS_ARRAY = ['blue','cyan','gold','gray','green','magenta','orange','red','white','yellow']; //set of colors
       const TARGET_INDEX = Math.floor(Math.random()*COLORS_ARRAY.length); //random index for choosing initial game color at game start
-      
       const TARGET = COLORS_ARRAY[TARGET_INDEX]; //the color the player has to guess
-      console.log(TARGET); //logs this games 'target' color
-      let guess = ''; // empty container for guess
+      console.log("Target color is " +TARGET); //logs this games 'target' color
+      let guess = ''; // empty container for storing player guess
       let correct = false; //used for controlling do-while loop
-
+    //End Setup
 
       do{
       guess = prompt("I'm thinking of one of these colors:\n" +
       COLORS_ARRAY.join(', ') + "\nWhat color am I thinking of?"); //Ask for player guess, store in *guess*
-        if (guess === null) {console.log("You've hit cancel. See you next game"); return;} 
+        if (guess === null) {
+          console.log("User hit cancel. See you next game");
+          alert("You've hit cancel, The game will now end."); 
+          return;
+        }
+        else if(guess === ""){
+          console.log("User entered empty string").
+          alert("You didnt provide a guess. Try again.");
+          continue;
+        } 
         correct = checkGuess(guess, TARGET);
     }while(!correct);
       console.log("No longer in do while");
@@ -41,22 +48,21 @@ The game ends and the background color of the page changes to the successful col
     //This function 
     function checkGuess(guess, target){ //these parameters relate to userGuess and gameColor
       let correct = false;
-      let colorArrCheck = COLORS_ARRAY.slice();
-      colorArrCheck.sort() //sort the array alpabetically
-      //These statement perform validation
-      if(!(colorArrCheck.includes(guess))){ //is the 'guess' color not on the list?, if so do this
+      COLORS_ARRAY.sort(); //sort the array alpabetically
+      //These statements perform validation
+      if(!(COLORS_ARRAY.includes(guess))){ //is the 'guess' color not on the list?, if so do this
         console.log("Player guess color is not on the list");
         alert("Your Color is Not Recognized. Try again.");
         return; //return to the do while loop
       }
       //guess is now confirmed to be part of the color list
 
-      else if(colorArrCheck.indexOf(guess) > colorArrCheck.indexOf(target)){
+      else if(COLORS_ARRAY.indexOf(guess) > COLORS_ARRAY.indexOf(target)){
         console.log('The guess is incorrect, and higher than target');
         alert("Your guess is incorrect\nHint: Your answer was higher alphabetically.");
         return;
       }
-      else if(colorArrCheck.indexOf(guess) < colorArrCheck.indexOf(target)){
+      else if(COLORS_ARRAY.indexOf(guess) < COLORS_ARRAY.indexOf(target)){
         console.log('The guess is incorrect, and lower than target');
         alert("Your guess is incorrect\nHint: Your answer was lower alphabetically.");
         return;
